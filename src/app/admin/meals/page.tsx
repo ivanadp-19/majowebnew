@@ -6,12 +6,13 @@ import { MealForm } from '@/components/MealForm'
 import { MealTable } from '@/components/MealTable'
 
 const normalizeMeal = (meal: Meal | Record<string, any>): Meal => {
-  const id = (meal as Meal).id ?? meal._id ?? meal.meal_id
+  const record = meal as Record<string, any>
+  const id = (meal as Meal).id ?? record._id ?? record.meal_id
   return {
     id,
-    name: meal.name ?? meal.title ?? 'Comida sin nombre',
-    ingredients: meal.ingredients ?? meal.items ?? [],
-    notes: meal.notes ?? meal.description,
+    name: record.name ?? record.title ?? 'Comida sin nombre',
+    ingredients: record.ingredients ?? record.items ?? [],
+    notes: record.notes ?? record.description,
   }
 }
 
