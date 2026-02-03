@@ -1,26 +1,125 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f0e8;
+  --foreground: #1a1a1a;
+  --pink: #E891B1;
+  --olive: #8F9651;
+  --lavender: #DDBAF3;
+  --cream: #f5f0e8;
+  --sage: #b8c9a3;
+  --dark: #1a1a1a;
+  /* Legacy support */
+  --lime: #8F9651;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-pink: var(--pink);
+  --color-olive: var(--olive);
+  --color-lavender: var(--lavender);
+  --color-cream: var(--cream);
+  --color-sage: var(--sage);
+  --color-dark: var(--dark);
+  /* Legacy support */
+  --color-lime: var(--olive);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sour-gummy), sans-serif !important;
+}
+
+/* Custom wavy divider */
+.wave-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave-divider svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 80px;
+}
+
+.wave-divider .shape-fill {
+  fill: var(--cream);
+}
+
+/* Animated bird */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(-5deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+}
+
+.floating-bird {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+
+/* Nav links and buttons - Sour Gummy font */
+.nav-link {
+  font-family: var(--font-sour-gummy), sans-serif !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Buttons - Sour Gummy font */
+button,
+a[class*="button"],
+[role="button"] {
+  font-family: var(--font-sour-gummy), sans-serif !important;
+}
+
+/* Script font styling - Gluten */
+.script-text {
+  font-family: var(--font-gluten), cursive !important;
+  font-weight: 400;
+}
+
+/* Bold display text - Delius */
+.display-text {
+  font-family: var(--font-delius), sans-serif !important;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }

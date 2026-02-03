@@ -1,0 +1,60 @@
+---
+alwaysApply: true
+---
+# Clerk + Next.js App Router (Current)
+
+Use only the App Router approach from Clerk docs.
+
+## Required
+- Install `@clerk/nextjs@latest`.
+- Create `proxy.ts` using `clerkMiddleware()` from `@clerk/nextjs/server`.
+  - Place in `src/` if it exists, otherwise project root.
+- Wrap the app with `<ClerkProvider>` in `app/layout.tsx`.
+- Use Clerk components from `@clerk/nextjs` (`SignInButton`, `SignUpButton`, `UserButton`, `SignedIn`, `SignedOut`).
+- Import server helpers (e.g., `auth()`) from `@clerk/nextjs/server` and use `async/await`.
+- Only use placeholder keys in examples; real keys go in `.env.local`.
+- Verify `.gitignore` excludes `.env*`.
+
+## Forbidden
+- Pages Router patterns (`_app.tsx`, `pages/` routes).
+- `authMiddleware()` or other deprecated APIs.
+- `withAuth`, older `currentUser` imports, or legacy env var patterns.
+- Writing real keys to tracked files or logs.
+
+## Quickstart Pattern (App Router)
+```typescript
+// proxy.ts
+import { clerkMiddleware } from "@clerk/nextjs/server";
+export default clerkMiddleware();
+export const config = {
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
+};
+```
+
+```typescript
+// app/layout.tsx
+import { ClerkProvider, SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          <header>
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
+  );
+}
+```
