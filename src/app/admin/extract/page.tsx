@@ -26,6 +26,7 @@ export default function ExtractPage() {
   const [job, setJob] = useState<IngestJob | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isUploading, setIsUploading] = useState(false)
+  const hasResult = job?.result !== undefined && job?.result !== null
 
   const handleUpload = async (file: File) => {
     setError(null)
@@ -94,7 +95,7 @@ export default function ExtractPage() {
           {job.error && (
             <div className="mt-4 text-sm text-red-600">Error: {job.error}</div>
           )}
-          {job.result && !job.summary && (
+          {hasResult && !job.summary && (
             <pre className="mt-4 whitespace-pre-wrap rounded bg-neutral-50 p-3 text-xs text-neutral-600">
               {JSON.stringify(job.result, null, 2)}
             </pre>
