@@ -33,6 +33,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const messages = (body.messages ?? []) as UIMessage[]
   const sessionId = body.session_id ?? null
+  const userId = body.user_id ?? null
   const message = extractLastUserText(messages)
 
   const response = await fetch(`${API_BASE_URL}/chat`, {
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
     body: JSON.stringify({
       message,
       session_id: sessionId,
+      user_id: userId,
     }),
   })
 

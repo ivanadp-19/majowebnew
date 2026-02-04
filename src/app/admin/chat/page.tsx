@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useChat } from '@ai-sdk/react'
+import { useUser } from '@clerk/nextjs'
 import { TextStreamChatTransport } from 'ai'
 import {
   Conversation,
@@ -32,6 +33,8 @@ export default function ChatPage() {
   const [input, setInput] = useState('')
   const [sessionId, setSessionId] = useState<string | null>(null)
   const sessionRef = useRef<string | null>(null)
+  const { user, isLoaded } = useUser()
+  const userEmail = user?.primaryEmailAddress?.emailAddress
 
   const transport = useMemo(
     () =>
@@ -84,19 +87,21 @@ export default function ChatPage() {
   const handleSubmit = (message: PromptInputMessage) => {
     const text = message.text?.trim()
     if (!text) return
+    if (!userEmail) return
     const stableSessionId = ensureSessionId()
     sendMessage(
       { text },
       {
         body: {
           session_id: stableSessionId,
+          user_id: userEmail,
         },
       },
     )
     setInput('')
   }
 
-  const canSubmit = status === 'ready' && input.trim().length > 0
+  const canSubmit = status === 'ready' && input.trim().length > 0 && Boolean(userEmail)
 
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col gap-6">
@@ -168,6 +173,9 @@ export default function ChatPage() {
               <PromptInputSubmit status={status} disabled={!canSubmit} />
             </PromptInputFooter>
           </PromptInput>
+          {isLoaded && !userEmail && (
+            <p className="mt-2 text-xs text-red-500">No encontramos tu correo de usuario.</p>
+          )}
           {error && <p className="mt-2 text-xs text-red-500">Algo salió mal.</p>}
         </div>
       </div>
